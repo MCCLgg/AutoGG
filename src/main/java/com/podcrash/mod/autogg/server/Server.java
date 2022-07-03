@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public abstract class Server {
+    protected final Pattern ipPattern;
     private final String name;
     private final String messagePrefix;
     private final ArrayList<Trigger> triggers;
-    protected final Pattern ipPattern;
     
     public Server(String name, String regex, String messagePrefix, ArrayList<Trigger> triggers){
         this.name = name;
@@ -27,7 +27,7 @@ public abstract class Server {
         return triggers;
     }
     
-    public abstract boolean matchServer();
+    public abstract boolean matchServer( );
     
     public String getMessagePrefix( ){
         return messagePrefix;

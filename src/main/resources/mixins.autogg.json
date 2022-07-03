@@ -1,0 +1,7 @@
+{
+  "package": "com.podcrash.mod.autogg.mixins",
+  "refmap": "mixins.autogg.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "verbose": true,
+  "client": []
+}

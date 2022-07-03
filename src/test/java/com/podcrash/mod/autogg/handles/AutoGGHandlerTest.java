@@ -1,7 +1,7 @@
 package com.podcrash.mod.autogg.handles;
 
 import junit.framework.TestCase;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.util.regex.Pattern;
 

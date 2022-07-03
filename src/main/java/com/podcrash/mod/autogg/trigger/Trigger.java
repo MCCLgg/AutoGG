@@ -4,25 +4,23 @@ import java.util.regex.Pattern;
 
 public class Trigger {
     private final int type;
-
+    
     private final String pattern;
-
+    private final Pattern regex;
     private TriggerType triggerType;
     
-    private final Pattern regex;
-
-    public Trigger(int type, String pattern) {
+    public Trigger(int type, String pattern){
         this.type = type;
         this.pattern = pattern;
-        regex  = Pattern.compile(pattern);
+        regex = Pattern.compile(pattern);
     }
-
-    public TriggerType getType() {
+    
+    public TriggerType getType( ){
         if (triggerType == null) triggerType = TriggerType.getByType(type);
         return triggerType;
     }
-
-    public String getPattern() {
+    
+    public String getPattern( ){
         return pattern;
     }
     
