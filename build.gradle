@@ -14,14 +14,12 @@ buildscript {
     }
     dependencies {
         classpath "com.github.asbyth:ForgeGradle:6f53277"
-        classpath 'com.github.LxGaming:MixinGradle:d75e32e'
         classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 compileJava.options.encoding = 'UTF-8'
@@ -48,20 +46,12 @@ repositories {
 }
 
 dependencies {
-    implementation('org.spongepowered:mixin:0.7.11-SNAPSHOT')
     testImplementation 'junit:junit:3.8.2'
     testImplementation 'org.testng:testng:7.1.0'
-    annotationProcessor('org.spongepowered:mixin:0.7.11-SNAPSHOT')
-}
-
-mixin {
-    add sourceSets.main, "mixins.autogg.refmap.json"
 }
 
 jar {
     manifest.attributes(
-            'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
-            'MixinConfigs': "mixins.autogg.json",
             'FMLCorePluginContainsFMLMod': true,
             "ForceLoadAsMod": true
     )
@@ -69,9 +59,6 @@ jar {
 
 shadowJar {
     zip64 true
-    dependencies {
-        include(dependency('org.spongepowered:mixin:0.7.11-SNAPSHOT'))
-    }
     mainClassName = "AutoGG"
 }
 

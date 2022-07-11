@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Random;
@@ -18,12 +19,11 @@ public class AutoGGHandler {
     private final String[] primaryGGStrings = {"gg"/*, "GG", "gf", "Good Game", "Good Fight", "Good Round! :D"*/};
     private volatile Server server;
     private long lastGG = 0;
-    //private final String[] secondaryGGStrings = {"Have a good day!", "<3", "AutoGG By Sk1er!", "gf", "Good Fight", "Good Round", ":D", "Well played!", "wp"};
     
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event){
         if (!(event.entity instanceof EntityPlayerSP)) return;
-    
+        if (!FMLCommonHandler.instance().getEffectiveSide().isClient()) return;
         if (event.entity == Minecraft.getMinecraft().thePlayer){
             new Thread(( ) -> {
                 for ( Server s : AutoGG.instance.getServerManager().getServers() ){
@@ -57,17 +57,13 @@ public class AutoGGHandler {
                             invokeGG();
                             return;
                         }
-            
+    
                     case CASUAL:
-                        //if (AutoGG.instance.getAutoGGConfig().isCasualAutoGGEnabled()) {
                         if (trigger.triggers(stripped)){
                             invokeGG();
                         }
-                        //}
                 }
             }))).start();
-            
-            // Multithreading.runAsync();
         }
     }
     
