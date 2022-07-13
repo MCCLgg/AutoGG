@@ -16,7 +16,7 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class AutoGGHandler {
-    private final String[] primaryGGStrings = {"gg"/*, "GG", "gf", "Good Game", "Good Fight", "Good Round! :D"*/};
+    private final String[] primaryGGStrings = {"gg", "GG"};
     private volatile Server server;
     private long lastGG = 0;
     
