@@ -4,7 +4,8 @@ import com.podcrash.mod.autogg.commands.TestCommand;
 import com.podcrash.mod.autogg.handles.AutoGGHandler;
 import com.podcrash.mod.autogg.server.Server;
 import com.podcrash.mod.autogg.server.ServerManager;
-import com.podcrash.mod.autogg.server.Servers;
+import com.podcrash.mod.autogg.server.servers.Hypixel;
+import com.podcrash.mod.autogg.server.servers.Mineplex;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
@@ -31,12 +32,7 @@ public class AutoGG {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event){
         if (event.getSide().isClient()){
-            /*Set<String> joined = new HashSet<>();
-            joined.addAll(Arrays.asList(primaryGGStrings));
-            //joined.addAll(Arrays.asList(secondaryGGStrings));
-    
-            PatternManager.patterns.registerPlaceHolder("antigg_strings", String.join("|", joined));*/
-            AutoGG.instance.registerServers(new Servers.Hypixel(), new Servers.Mineplex(), new Servers.LocalHost());
+            registerServers(new Hypixel(), new Mineplex()/*, new LocalHost()*/);
             MinecraftForge.EVENT_BUS.register(new AutoGGHandler());
         }
     }

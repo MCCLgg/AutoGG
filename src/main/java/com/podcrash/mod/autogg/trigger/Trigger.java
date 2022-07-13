@@ -2,22 +2,21 @@ package com.podcrash.mod.autogg.trigger;
 
 import java.util.regex.Pattern;
 
-public class Trigger {
-    private final int type;
+public final class Trigger {
+    
     
     private final String pattern;
+    private final TriggerType type;
     private final Pattern regex;
-    private TriggerType triggerType;
     
-    public Trigger(int type, String pattern){
+    public Trigger(TriggerType type, String pattern){
         this.type = type;
         this.pattern = pattern;
         regex = Pattern.compile(pattern);
     }
     
     public TriggerType getType( ){
-        if (triggerType == null) triggerType = TriggerType.getByType(type);
-        return triggerType;
+        return type;
     }
     
     public String getPattern( ){

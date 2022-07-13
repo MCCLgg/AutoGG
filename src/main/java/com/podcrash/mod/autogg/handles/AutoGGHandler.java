@@ -75,7 +75,7 @@ public class AutoGGHandler {
             lastGG = System.currentTimeMillis();
             
             String msg = primaryGGStrings[new Random().nextInt(primaryGGStrings.length)];
-            int delay = 1; //In seconds
+            int delay = 300; //In milliseconds
             
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
@@ -84,8 +84,8 @@ public class AutoGGHandler {
                     Minecraft.getMinecraft().thePlayer.sendChatMessage(prefix.isEmpty() ? msg : prefix + " " + msg);
                 }
             };
-            
-            timer.schedule(task, TimeUnit.SECONDS.toMillis(delay));
+    
+            timer.schedule(task, TimeUnit.MILLISECONDS.toMillis(delay));
             
         }
     }
