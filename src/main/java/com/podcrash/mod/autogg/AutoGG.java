@@ -10,7 +10,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
 
-@Mod(modid = "autogg", name = "AutoGG", version = "1.0-SNAPSHOT")
+@Mod(modid = "autogg", name = "AutoGG", version = "1.1-SNAPSHOT")
 public class AutoGG {
     /** This is the instance of your mod as created by Forge. It will never be null. */
     @Mod.Instance("autogg")
