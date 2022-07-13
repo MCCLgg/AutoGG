@@ -1,57 +1,48 @@
 package com.podcrash.mod.autogg;
 
-import com.podcrash.mod.autogg.commands.TestCommand;
 import com.podcrash.mod.autogg.handles.AutoGGHandler;
 import com.podcrash.mod.autogg.server.Server;
 import com.podcrash.mod.autogg.server.ServerManager;
 import com.podcrash.mod.autogg.server.servers.Hypixel;
 import com.podcrash.mod.autogg.server.servers.Mineplex;
+import net.minecraft.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@Mod(modid = "autogg", name = "AutoGG", version = "1.0-SNAPSHOT")
+@Mod("autogg")
 public class AutoGG {
+    private static final Logger LOGGER = LogManager.getLogger();
     /** This is the instance of your mod as created by Forge. It will never be null. */
-    @Mod.Instance("autogg")
+    
     public static AutoGG instance;
     private ServerManager servers;
     
-    /**
-     * This is the first initialization event. Register tile entities here.
-     * The registry events below will have fired prior to entry to this method.
-     */
-    @Mod.EventHandler
-    public void preinit(FMLPreInitializationEvent event){
-    
+    public AutoGG( ){
+        // Register the setup method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        // Register the doClientStuff method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+        instance = this;
     }
     
-    /**
-     * This is the second initialization event. Register custom recipes
-     */
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent event){
-        if (event.getSide().isClient()){
-            AutoGG.instance.registerServers(new Hypixel(), new Mineplex()/*, new LocalHost()*/);
-            MinecraftForge.EVENT_BUS.register(new AutoGGHandler());
-        }
+    private void setup(final FMLCommonSetupEvent event){
+        // some preinit code
+        LOGGER.info("HELLO FROM PREINIT");
+        LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
     }
     
-    @Mod.EventHandler
-    public void postInit(FMLServerStartingEvent event){
-        if (event.getSide().isServer()){
-            event.registerServerCommand(new TestCommand());
-        }
+    private void doClientStuff(final FMLClientSetupEvent event){
+        // do something that can only be done on the client
+        AutoGG.instance.registerServers(new Hypixel(), new Mineplex()/*, new LocalHost()*/);
+        MinecraftForge.EVENT_BUS.register(new AutoGGHandler());
+        LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
     }
     
-    
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event){
-    }
-    
-    @Mod.EventHandler
-    public void loadComplete(FMLLoadCompleteEvent event){
-    }
     
     public ServerManager getServerManager( ){
         return servers;

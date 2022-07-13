@@ -1,3 +1,4 @@
+/*
 package com.podcrash.mod.autogg.commands;
 
 import net.minecraft.command.CommandBase;
@@ -31,3 +32,4 @@ public class TestCommand extends CommandBase {
         }
     }
 }
+*/

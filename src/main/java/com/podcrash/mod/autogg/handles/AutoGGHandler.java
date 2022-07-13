@@ -1,31 +1,31 @@
 package com.podcrash.mod.autogg.handles;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
 import com.podcrash.mod.autogg.AutoGG;
 import com.podcrash.mod.autogg.server.Server;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.util.text.ChatType;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = {Dist.CLIENT})
 public class AutoGGHandler {
-    private final String[] primaryGGStrings = {"gg"/*, "GG", "gf", "Good Game", "Good Fight", "Good Round! :D"*/};
+    private final String[] primaryGGStrings = {"gg", "GG"/*, "gf"*/};
     private volatile Server server;
     private long lastGG = 0;
     
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event){
-        if (!(event.getEntity() instanceof EntityPlayerSP)) return;
-        if (!FMLCommonHandler.instance().getEffectiveSide().isClient()) return;
-        if (event.getEntity() == Minecraft.getMinecraft().player){
+        if (!(event.getEntity() instanceof ClientPlayerEntity)) return;
+        if (event.getEntity() == Minecraft.getInstance().player){
             new Thread(( ) -> {
                 for ( Server s : AutoGG.instance.getServerManager().getServers() ){
                     try {
@@ -45,8 +45,7 @@ public class AutoGGHandler {
     @SubscribeEvent
     public void onClientChatReceived(ClientChatReceivedEvent event){
         if (event.getType() == ChatType.GAME_INFO) return;
-        
-        String stripped = ChatFormatting.stripFormatting(event.getMessage().getUnformattedText());
+        String stripped = event.getMessage().getString();
         if (server != null){
             new Thread(( ) -> server.getTriggers().forEach((trigger -> {
                 switch(trigger.getType()){
@@ -58,7 +57,7 @@ public class AutoGGHandler {
                             invokeGG();
                             return;
                         }
-            
+                    
                     case CASUAL:
                         if (trigger.triggers(stripped)){
                             invokeGG();
@@ -70,11 +69,12 @@ public class AutoGGHandler {
     
     private void invokeGG( ){
         if (server != null){
+            if (Minecraft.getInstance().player == null) return;
             String prefix = server.getMessagePrefix();
             
             if (System.currentTimeMillis() - lastGG < 10_000) return;
             lastGG = System.currentTimeMillis();
-    
+            
             String msg = primaryGGStrings[new Random().nextInt(primaryGGStrings.length)];
             int delay = 300; //In milliseconds
             
@@ -82,10 +82,10 @@ public class AutoGGHandler {
             TimerTask task = new TimerTask() {
                 @Override
                 public void run( ){
-                    Minecraft.getMinecraft().player.sendChatMessage(prefix.isEmpty() ? msg : prefix + " " + msg);
+                    Minecraft.getInstance().player.sendChatMessage(prefix.isEmpty() ? msg : prefix + " " + msg);
                 }
             };
-    
+            
             timer.schedule(task, TimeUnit.MILLISECONDS.toMillis(delay));
             
         }

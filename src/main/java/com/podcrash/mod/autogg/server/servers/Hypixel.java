@@ -47,7 +47,8 @@ public final class Hypixel extends Server {
     
     @Override
     public boolean matchServer( ){
-        return super.ipPattern.matcher(Minecraft.getMinecraft().player.getServerBrand()).matches();
+        if (Minecraft.getInstance().player == null) return false;
+        return super.ipPattern.matcher(Minecraft.getInstance().player.getServerBrand()).matches();
     }
     
 }
