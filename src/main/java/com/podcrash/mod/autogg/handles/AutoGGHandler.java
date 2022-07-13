@@ -3,8 +3,8 @@ package com.podcrash.mod.autogg.handles;
 import com.podcrash.mod.autogg.AutoGG;
 import com.podcrash.mod.autogg.server.Server;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.util.text.ChatType;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.ChatType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -24,7 +24,7 @@ public class AutoGGHandler {
     
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event){
-        if (!(event.getEntity() instanceof ClientPlayerEntity)) return;
+        if (!(event.getEntity() instanceof LocalPlayer)) return;
         if (event.getEntity() == Minecraft.getInstance().player){
             new Thread(( ) -> {
                 for ( Server s : AutoGG.instance.getServerManager().getServers() ){
@@ -82,7 +82,7 @@ public class AutoGGHandler {
             TimerTask task = new TimerTask() {
                 @Override
                 public void run( ){
-                    Minecraft.getInstance().player.sendChatMessage(prefix.isEmpty() ? msg : prefix + " " + msg);
+                    Minecraft.getInstance().player.chat(prefix.isEmpty() ? msg : prefix + " " + msg);
                 }
             };
             

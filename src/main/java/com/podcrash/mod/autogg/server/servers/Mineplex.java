@@ -29,7 +29,7 @@ public final class Mineplex extends Server {
     
     @Override
     public boolean matchServer( ){
-        if (Minecraft.getInstance().getCurrentServerData() == null) return false;
-        return super.ipPattern.matcher(Minecraft.getInstance().getCurrentServerData().serverIP).matches();
+        if (Minecraft.getInstance().getCurrentServer() == null) return false;
+        return super.ipPattern.matcher(Minecraft.getInstance().getCurrentServer().ip).matches();
     }
 }

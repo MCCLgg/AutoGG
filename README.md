@@ -1,1 +1,1 @@
-This version support from 1.14 to 1.16
+This version support from 1.17 to 1.18
