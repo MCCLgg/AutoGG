@@ -4,11 +4,11 @@ plugins {
 
 
 group = 'com.podcrash.mod.autogg'
-version = '1.1-SNAPSHOT'
+version = '1.1-SNAPSHOT-1.19'
 
 java {
     archivesBaseName = 'AutoGG'
-    toolchain.languageVersion = JavaLanguageVersion.of(16)
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
 minecraft {
@@ -25,7 +25,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'official', version: '1.17.1'
+    mappings channel: 'official', version: '1.19'
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -48,6 +48,8 @@ minecraft {
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'AutoGG'
 
             mods {
                 autogg {
@@ -63,6 +65,26 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
+            property 'forge.enabledGameTestNamespaces', 'AutoGG'
+
+            mods {
+                autogg {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        gameTestServer {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            property 'forge.logging.console.level', 'debug'
+
+            property 'forge.enabledGameTestNamespaces', 'AutoGG'
 
             mods {
                 autogg {
@@ -94,6 +116,8 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    mavenCentral()
+
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
 
@@ -107,12 +131,12 @@ dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.17.1-37.1.1'
+    minecraft 'net.minecraftforge:forge:1.19-41.0.98'
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    testImplementation 'junit:junit:3.8.2'
-    testImplementation 'org.testng:testng:7.1.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.testng:testng:7.6.0'
 
 
     // Real mod deobf dependency examples - these get remapped to your current mappings

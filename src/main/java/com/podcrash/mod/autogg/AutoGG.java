@@ -1,14 +1,17 @@
 package com.podcrash.mod.autogg;
 
+import com.mojang.logging.LogUtils;
 import com.podcrash.mod.autogg.handles.AutoGGHandler;
 import com.podcrash.mod.autogg.server.Server;
 import com.podcrash.mod.autogg.server.ServerManager;
 import com.podcrash.mod.autogg.server.servers.Hypixel;
 import com.podcrash.mod.autogg.server.servers.Mineplex;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.slf4j.Logger;
 
 @Mod("autogg")
 public class AutoGG {
@@ -16,17 +19,18 @@ public class AutoGG {
     
     public static AutoGG instance;
     private ServerManager servers;
+    public static final Logger LOGGER = LogUtils.getLogger();
     
     public AutoGG( ){
         // Register the doClientStuff method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
         instance = this;
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.addListener(this::doClientStuff);
+        MinecraftForge.EVENT_BUS.register(new AutoGGHandler());
     }
     
     private void doClientStuff(final FMLClientSetupEvent event){
-        // do something that can only be done on the client
         AutoGG.instance.registerServers(new Hypixel(), new Mineplex()/*, new LocalHost()*/);
-        MinecraftForge.EVENT_BUS.register(new AutoGGHandler());
     }
     
     

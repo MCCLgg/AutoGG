@@ -4,10 +4,11 @@ import com.podcrash.mod.autogg.AutoGG;
 import com.podcrash.mod.autogg.server.Server;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.network.chat.ChatType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -16,18 +17,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = {Dist.CLIENT})
+@Mod.EventBusSubscriber(modid = "autogg", bus = Mod.EventBusSubscriber.Bus.MOD, value = {Dist.CLIENT})
 public class AutoGGHandler {
     private final String[] primaryGGStrings = {"gg", "GG"/*, "gf"*/};
     private volatile Server server;
     private long lastGG = 0;
     
     @SubscribeEvent
-    public void onEntityJoinWorld(EntityJoinWorldEvent event){
+    public void onEntityJoinLevelEvent(final EntityJoinLevelEvent event){
         if (!(event.getEntity() instanceof LocalPlayer)) return;
         if (event.getEntity() == Minecraft.getInstance().player){
             new Thread(( ) -> {
-                for ( Server s : AutoGG.instance.getServerManager().getServers() ){
+                for ( Server s : AutoGG.instance.getServerManager().servers() ){
                     try {
                         if (s.matchServer()){
                             server = s;
@@ -42,9 +43,11 @@ public class AutoGGHandler {
         }
     }
     
+    //!NOT WORKING JETT DUE TO THE FORGE EVENT IS NOT BEING FIRED
+    //!although, when this get fixed, should automatically work just fine.
     @SubscribeEvent
-    public void onClientChatReceived(ClientChatReceivedEvent event){
-        if (event.getType() == ChatType.GAME_INFO) return;
+    public void onClientChatReceivedEvent(final ClientChatReceivedEvent event){
+        if (event.getType() == BuiltinRegistries.CHAT_TYPE.get(ChatType.GAME_INFO)) return;
         String stripped = event.getMessage().getString();
         if (server != null){
             new Thread(( ) -> server.getTriggers().forEach((trigger -> {
